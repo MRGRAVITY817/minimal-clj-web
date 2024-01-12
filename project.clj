@@ -6,5 +6,6 @@
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [ring/ring-core "1.9.1"]
                  [ring/ring-jetty-adapter "1.9.1"]
-                 [aleph "0.4.6"]]
+                 [aleph "0.4.6"]
+                 [compojure "1.6.2"]]
   :repl-options {:init-ns minimal.core})

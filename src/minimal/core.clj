@@ -1,25 +1,32 @@
 (ns minimal.core
   (:require [ring.adapter.jetty :as jetty]
             #_[aleph.http         :as aleph]
-            [clojure.pprint     :as pprint]))
+            [clojure.pprint     :as pprint]
+            [compojure.core     :as comp]
+            [compojure.route    :as route]))
 
 (defonce server (atom nil))
 
-(defn app [req]
-  (case (:uri req)
-    "/" {:status 200
-         :body "<h1>Homepage</h1>
-                <ul>
-                    <li><a href=\"/echo\">Echo request</a></li>
-                    <li><a href=\"/greeting\">Greeting</a></li>
-                </ul>"
-         :headers {"Content-Type" "text/html; charset=UTF-8"}}
-    "/echo" {:status 200
-             :body (with-out-str (pprint/pprint req))
-             :headers {"Content-Type" "text/plain"}}
-    {:status 404
-     :body "Not found."
-     :headers {"Content-Type" "text/plain"}}))
+(comp/defroutes app
+  (comp/GET "/" []         {:status 200
+                            :body "<h1>Homepage</h1>
+                              <ul>
+                                  <li><a href=\"/echo\">Echo request</a></li>
+                                  <li><a href=\"/greeting\">Greeting</a></li>
+                              </ul>"
+                            :headers {"Content-Type" "text/html; charset=UTF-8"}})
+
+  (comp/ANY "/echo" req    {:status 200
+                            :body (with-out-str (pprint/pprint req))
+                            :headers {"Content-Type" "text/plain"}})
+
+  (comp/GET "/greeting" [] {:status 200
+                            :body "Hello, World!"
+                            :headers {"Content-Type" "text/plain"}})
+
+  (route/not-found         {:status 404
+                            :body "Not found."
+                            :headers {"Content-Type" "text/plain"}}))
 
 (defn start-server []
   (reset! server
