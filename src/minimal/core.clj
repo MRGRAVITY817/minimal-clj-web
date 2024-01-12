@@ -1,13 +1,14 @@
 (ns minimal.core
   (:require [ring.adapter.jetty :as jetty]
-            #_[aleph.http         :as aleph]))
+            #_[aleph.http         :as aleph]
+            [clojure.pprint     :as pprint]))
 
 (defonce server (atom nil))
 
-(defn app [_req]
+(defn app [req]
   {:status 200
-   :body "{\"greeting\": \"Hello, World!\"}"
-   :headers {"Content-Type" "application/json"}})
+   :body (with-out-str (pprint/pprint req))
+   :headers {"Content-Type" "text/plain"}})
 
 (defn start-server []
   (reset! server
