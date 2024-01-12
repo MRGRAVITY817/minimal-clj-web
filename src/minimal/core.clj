@@ -5,7 +5,9 @@
 (defonce server (atom nil))
 
 (defn app [_req]
-  {:status 200 :body "Harry potter" :headers {}})
+  {:status 200
+   :body "{\"greeting\": \"Hello, World!\"}"
+   :headers {"Content-Type" "application/json"}})
 
 (defn start-server []
   (reset! server
