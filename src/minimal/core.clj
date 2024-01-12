@@ -31,7 +31,7 @@
                             :headers {"Content-Type" "text/plain"}}))
 
 (def app
-  (-> routes
+  (-> (fn [req] (routes req))
       wrap-keyword-params
       wrap-params))
 
