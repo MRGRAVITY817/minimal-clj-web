@@ -3,10 +3,13 @@
 
 (defonce server (atom nil))
 
+(defn app [_req]
+  {:status 200 :body "Hhhhhh" :headers {}})
+
 (defn start-server []
   (reset! server
           (jetty/run-jetty
-           (fn [_req] {:status 200 :body "Hello" :headers {}})
+           (fn [req] (app req))
            {:port 3001       ;; listen on port 3001
             :join? false}))) ;; don't block the main thread
 
@@ -14,8 +17,3 @@
   (when-some [s @server]
     (.stop s)
     (reset! server nil)))
-
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
