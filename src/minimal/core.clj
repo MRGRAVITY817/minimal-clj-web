@@ -3,11 +3,12 @@
             #_[aleph.http         :as aleph]
             [clojure.pprint     :as pprint]
             [compojure.core     :as comp]
-            [compojure.route    :as route]))
+            [compojure.route    :as route]
+            [ring.middleware.params :refer [wrap-params]]))
 
 (defonce server (atom nil))
 
-(comp/defroutes app
+(comp/defroutes routes
   (comp/GET "/" []         {:status 200
                             :body "<h1>Homepage</h1>
                               <ul>
@@ -27,6 +28,8 @@
   (route/not-found         {:status 404
                             :body "Not found."
                             :headers {"Content-Type" "text/plain"}}))
+
+(def app (wrap-params routes))
 
 (defn start-server []
   (reset! server
