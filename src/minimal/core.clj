@@ -4,7 +4,8 @@
             [clojure.pprint     :as pprint]
             [compojure.core     :as comp]
             [compojure.route    :as route]
-            [ring.middleware.params :refer [wrap-params]]))
+            [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.keyword-params :refer [wrap-keyword-params]]))
 
 (defonce server (atom nil))
 
@@ -29,7 +30,10 @@
                             :body "Not found."
                             :headers {"Content-Type" "text/plain"}}))
 
-(def app (wrap-params routes))
+(def app
+  (-> routes
+      wrap-keyword-params
+      wrap-params))
 
 (defn start-server []
   (reset! server
